@@ -10,12 +10,7 @@ desYear = input("What year do you want?")
 validFactors = ["cpi_overall", "food_beverages", "alcohol_tobacco", "clothing_footwear", "housing_utilities", "furnishings_household",	"health", "transport", "communication", "recreation_culture", "education", "restaurants_hotels", "miscellaneous"]
 if desFactor in validFactors:
     cur.execute(f"SELECT {desFactor}, year FROM available_data WHERE year = (?)", (desYear,))
-    result = cur.fetchall()
+    result = cur.fetchone()
     print(result)
 else:
     print("Invalid querry")
-
-#cur.execute("SELECT * FROM available_data")
-#result = cur.fetchall()
-#for column in result:
-#    print(column)
