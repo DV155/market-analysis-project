@@ -17,7 +17,7 @@ cur.execute("SELECT * from available_data WHERE year = 2025")
 maxValue = cur.fetchone()
 neededValue = max(maxValue[2:])
 column_names = [desc[0] for desc in cur.description]
-max_index = maxValue.index(neededValue)  # Skip year column
+max_index = maxValue.index(neededValue) 
 max_column = column_names[max_index]
 print("Biggest contributor in 2025 is " + max_column + " at " +  str(neededValue))
 desFactor = input("What basket component do you want?")
