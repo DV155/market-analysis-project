@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
+import math
 
 conn = sqlite3.connect("austrian_cpi.db")
 cur = conn.cursor()
@@ -8,6 +9,10 @@ cur = conn.cursor()
 cur.execute("SELECT cpi_overall FROM available_data WHERE year = 2025")
 currentCPI = cur.fetchone()
 print("2025 Austrian CPI is", currentCPI[0])
+cur.execute("SELECT cpi_overall FROM available_data WHERE year = 2024")
+lastYearCPI = cur.fetchone()
+inflationCalc = round(((currentCPI[0] - lastYearCPI[0]) / lastYearCPI[0] ) * 100, 2)
+print("This means a", inflationCalc, "% inflation rate")
 cur.execute("SELECT * from available_data WHERE year = 2025")
 maxValue = cur.fetchone()
 neededValue = max(maxValue[2:])
