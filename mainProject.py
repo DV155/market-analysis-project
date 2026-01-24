@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 conn = sqlite3.connect("austrian_cpi.db")
 cur = conn.cursor()
 
+cur.execute("SELECT cpi_overall FROM available_data WHERE year = 2025")
 currentCPI = cur.fetchone()
 print("2025 Austrian CPI is", currentCPI[0])
 cur.execute("SELECT * from available_data WHERE year = 2025")
@@ -23,4 +24,3 @@ if desFactor in validFactors:
     print(result[0])
 else:
     print("Invalid querry")
-cur.execute("SELECT cpi_overall FROM available_data WHERE year = 2025")
