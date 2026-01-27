@@ -30,9 +30,9 @@ if desFactor in validFactors:
 else:
     print("Invalid querry")
 cur.execute("SELECT year from available_data")
-allYears = cur.fetchone()
+allYears = cur.fetchall()
 cur.execute("SELECT cpi_overall from available_data")
-allCPIs = cur.fetchone()
+allCPIs = cur.fetchall()
 x = allYears
 y = allCPIs
 
@@ -40,4 +40,7 @@ plt.plot(x, y, marker="o")
 plt.title('Austrian CPI 2015-2025')
 plt.xlabel('Year')
 plt.ylabel('Overall CPI')
+ax = plt.gca()
+ax.set_xlim([2015, 2025])
+ax.set_ylim([95, 140])
 plt.show()
