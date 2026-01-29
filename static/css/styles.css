@@ -1,0 +1,40 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  float: left;
+}
+
+ul li a {
+  display: block;
+  /*color: white;*/
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/*ul li a:hover {
+  /*background-color: #111111;
+}*/
+
+.title {
+    background: linear-gradient(
+        to bottom,
+        red 0% 33%,
+        white 33% 66%,
+        red 66% 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    -webkit-text-stroke: 0.5px black;
+    font-size: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:100px;
+}
