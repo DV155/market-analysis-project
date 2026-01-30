@@ -22,7 +22,7 @@ def index():
     cpi = [row[1] for row in data]
 
     fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers'))
-    #fig.update_layout(title='Austrian CPI', xaxis_title='', yaxis_title='')
+    config = {'staticPlot': True}
     
     graph_html = fig.to_html(full_html=False)
     
