@@ -36,5 +36,19 @@ ul li a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin:100px;
+    margin-top:100px;
+}
+
+.modebar {
+display: none !important;
+}
+
+.parent {
+  margin: 1rem;
+  padding: 2rem 2rem;
+  text-align: center;
+}
+.child {
+  padding: 1rem 1rem;
+  vertical-align: middle;
 }
