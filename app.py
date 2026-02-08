@@ -33,5 +33,16 @@ def index():
     
     return render_template('index.html', graph=graph_html, inflationValue=inflationCalc)
 
+@app.route('/home')
+def home():
+    index()
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/calc')
+def calc():
+    return render_template('calculator.html')
+
 if __name__ == "__main__":
     serve(app)
