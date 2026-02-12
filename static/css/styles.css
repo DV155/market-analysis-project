@@ -1,3 +1,8 @@
+body {
+  background-color: #2d2d2d;
+  color:white;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
@@ -6,6 +11,10 @@ ul {
 
 ul li {
   float: left;
+}
+
+a {
+  color:white;
 }
 
 ul li a {

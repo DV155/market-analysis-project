@@ -3,6 +3,7 @@ import sqlite3
 import math
 #import plotly.express as px
 import plotly.graph_objects as go
+from datetime import date
 from waitress import serve
 
 app = Flask(__name__)
@@ -19,29 +20,44 @@ def index():
 
     years = [row[0] for row in data]
     cpi = [row[1] for row in data]
+    dateToday = date.today()
+    currentYearCalc = dateToday.year
+    currentYear = str(currentYearCalc - 1)
+    lastYear = str(currentYearCalc - 2)
 
-    fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers'))
+    fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
     config = {'staticPlot': True}
-    cur.execute("SELECT cpi_overall FROM available_data WHERE year = 2025")
+    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(gridcolor='#444444',tickfont=dict(color='white')))
+    cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}")
     currentCPI = cur.fetchone()
-    cur.execute("SELECT cpi_overall FROM available_data WHERE year = 2024")
+    cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {lastYear}")
     lastYearCPI = cur.fetchone()
     inflationCalc = round(((currentCPI[0] - lastYearCPI[0]) / lastYearCPI[0] ) * 100, 2)
+
+    cur.execute(f"SELECT * from available_data WHERE year = {currentYear}")
+    maxValue = cur.fetchone()
+    neededValue = max(maxValue[2:])
+    column_names = [desc[0] for desc in cur.description]
+    max_index = maxValue.index(neededValue) 
+    max_column = column_names[max_index]
+    clean_name = max_column.title().replace('_', ' and ')
     conn.close()
     
     graph_html = fig.to_html(full_html=False)
     
-    return render_template('index.html', graph=graph_html, inflationValue=inflationCalc)
+    return render_template('index.html', graph=graph_html, lastYear=lastYear, currentYear=currentYear, inflationValue=inflationCalc, neededValue=neededValue, clean_name=clean_name)
 
-@app.route('/home')
-def home():
-    index()
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 @app.route('/calc')
 def calc():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT year, cpi_overall FROM available_data")
+
+    conn.close()
     return render_template('calculator.html')
 
 if __name__ == "__main__":

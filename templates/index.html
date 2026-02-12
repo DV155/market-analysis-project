@@ -6,13 +6,14 @@
 
 {% block body %}
 <ul>
-    <li><a href="/home" title="Home Section">Home</a></li>
+    <li><a href="/" title="Home Section">Home</a></li>
     <li><a href="/calc" title="Calculator Section">Calculator</a></li>
     <li><a href="/about" title="About Section">About</a></li>
 </ul>
-<div class="title">Austrian CPI stats</div>
+<div class="title">Inflation in Austria</div>
 <div>{{ graph|safe }}</div>
 <div class='parent'>
-  <div class='child'>From <span class="lastYear"> 2024</span> to <span class="thisYear"> 2025</span> Inflation in Austria increased by <span class='child'>{{ inflationValue }} %</span></div>
+  <div class='child'>From <span class="lastYear">{{ lastYear }}</span> to <span class="thisYear">{{currentYear}}</span> Inflation in Austria increased by <span class='child'>{{ inflationValue }} %</span></div>
+  <div>The top inflation driver was <span>{{ clean_name }}</span> at <span>{{ neededValue }}</span> index points</div>
 </div>
 {% endblock %}
