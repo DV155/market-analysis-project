@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -11,6 +11,10 @@
     <li><a href="/about" title="About Section">About</a></li>
 </ul>
 <div class="title">Inflation Breakdown</div>
-<div>100€ in 2015 is € today</div>
+<form id="form" oninput="save()">
+<label for="inValue">€ amount in 2015</label>
+<input type="number" min="1" name="inValue" id="inValue">
+</form>
+<div><span id="inputVar"></span> € in 2015 is <span id="outputVar"></span>€ today</div>
 <div>This is a loss of 27.9% of purchasing power in 10 years</div>
 {% endblock %}
