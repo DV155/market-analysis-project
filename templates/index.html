@@ -16,9 +16,9 @@
   <div class='child'>From <span class="lastYear">{{ lastYear }}</span> to <span class="thisYear">{{currentYear}}</span> Inflation in Austria increased by <span class='child'>{{ inflationValue }} %</span></div>
   <div>The top inflation driver was <span>{{ clean_name }}</span> at <span>{{ neededValue }}</span> index points</div>
 </div>
-<div>The average food prices increased by <span id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
-<div>The average educational service prices increased by <span id="edCounter"data-value="{{edDif}}">0</span>%</div>
-<div>The average healthcare service prices increased by <span id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
+<div>The average food prices increased by <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
+<div>The average educational service prices increased by <span class="toBeLookedThrough" id="edCounter"data-value="{{edDif}}">0</span>%</div>
+<div>The average healthcare service prices increased by <span class="toBeLookedThrough" id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
 <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
 
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>

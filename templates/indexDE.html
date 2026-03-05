@@ -19,9 +19,9 @@
   <div class='child'>Von <span class="lastYear">{{ lastYear }}</span> bis <span class="thisYear">{{currentYear}}</span> haben die Preisen in Österreich um <span class='child'>{{ inflationValue }}</span>% gestiegen</div>
   <div>Der wichtigsten Beiträger dazu war <span>{{ clean_name }}</span> bei <span>{{ neededValue }}</span> VPI Punkten</div>
 </div>
-<div>Die durchschnittlichen Lebensmittelpreise stiegen um <span id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
-<div>Die durchschnittlichen Bildungsdienstpreise stiegen um <span id="edCounter" data-value="{{edDif}}">0</span>%</div>
-<div>Die durchschnittlichen Gesundheitsdienstpreise stiegen um <span id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
+<div>Die durchschnittlichen Lebensmittelpreise stiegen um <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
+<div>Die durchschnittlichen Bildungsdienstpreise stiegen um <span class="toBeLookedThrough" id="edCounter" data-value="{{edDif}}">0</span>%</div>
+<div>Die durchschnittlichen Gesundheitsdienstpreise stiegen um <span class="toBeLookedThrough" id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
 <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
 
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>
