@@ -131,4 +131,5 @@ def calcDE():
     return render_template('calculatorDE.html')
 
 if __name__ == "__main__":
-    serve(app)
+    #serve(app)
+    app.run(debug=True)

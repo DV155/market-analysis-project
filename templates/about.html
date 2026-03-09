@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/indexStyle.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -12,5 +12,10 @@
     <li><a href="/aboutDE" title="German">German</a></li>
 </ul>
 <div class="title">About</div>
-<p>Text</p>
+<h2>What?</h2>
+<p>This website is an inflation tracker, utilising publicly available data to model the rise of prices in Austria over the last decade, as well as the loss of purchasing power of the Austrian consumer in various key areas.</p>
+<h2>Why?</h2>
+<p2>Inflation remains a major issue in most EU countries, especially Austria. Among one of the website's goals is showing how "raw" government data can be transformed into a tool of public interest, this tool itself is not parteipolitisch.</p2>
+<h2>How?</h2>
+<p>This page uses openly-available information from the Austrian government to model the change in prices and corresponding graphs. The site uses the Consumer Price Index (CPI) as its benchmark of inflation. It was built with Python, Flask, SQLite for data management and Plotly.js for interactive visualisations. </p>
 {% endblock %}

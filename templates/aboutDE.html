@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/aboutStyle.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -12,5 +12,10 @@
     <li><a href="/about" title="Englisch">Englisch</a></li>
 </ul>
 <div class="title">Über</div>
+<h2>What?</h2>
+<p>Text</p>
+<h2>Why?</h2>
+<p2>Text</p2>
+<h2>How?</h2>
 <p>Text</p>
 {% endblock %}

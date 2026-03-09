@@ -25,10 +25,6 @@ ul li a {
   text-decoration: none;
 }
 
-/*ul li a:hover {
-  /*background-color: #111111;
-}*/
-
 .title {
     background: linear-gradient(
         to bottom,
@@ -50,14 +46,4 @@ ul li a {
 
 .modebar {
 display: none !important;
-}
-
-.parent {
-  margin: 1rem;
-  padding: 2rem 2rem;
-  text-align: center;
-}
-.child {
-  padding: 1rem 1rem;
-  vertical-align: middle;
 }
