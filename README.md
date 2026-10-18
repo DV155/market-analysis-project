@@ -163,13 +163,3 @@ Distributed under the MIT license. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- CONTACT -->
-## Contact
-
-Daniil Vasilcovschii - [GitHub](https://github.com/DV155)
-
-Project Link: [https://github.com/DV155/market-analysis-project](https://github.com/DV155/market-analysis-project)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
