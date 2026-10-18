@@ -3,7 +3,6 @@ import sqlite3
 import math
 #import plotly.express as px
 import plotly.graph_objects as go
-from datetime import date
 from waitress import serve
 
 app = Flask(__name__)
@@ -20,10 +19,10 @@ def index():
 
     years = [row[0] for row in data]
     cpi = [row[1] for row in data]
-    dateToday = date.today()
-    currentYearCalc = dateToday.year
-    currentYear = str(currentYearCalc - 1)
-    lastYear = str(currentYearCalc - 2)
+    cur.execute("SELECT MAX(year) FROM available_data") #Latest year in the DB
+    currentYearCalc = cur.fetchone()[0]
+    currentYear = str(currentYearCalc)
+    lastYear = str(currentYearCalc - 1)
 
     fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
     config = {'staticPlot': True}
@@ -66,10 +65,10 @@ def indexDE():
 
     years = [row[0] for row in data]
     cpi = [row[1] for row in data]
-    dateToday = date.today()
-    currentYearCalc = dateToday.year
-    currentYear = str(currentYearCalc - 1)
-    lastYear = str(currentYearCalc - 2)
+    cur.execute("SELECT MAX(year) FROM available_data") #Latest year in the DB
+    currentYearCalc = cur.fetchone()[0]
+    currentYear = str(currentYearCalc)
+    lastYear = str(currentYearCalc - 1)
 
     fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
     config = {'staticPlot': True}
