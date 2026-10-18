@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block lang %}de{% endblock %}
+
 {% block head %}
  <link rel="stylesheet" href="{{ url_for('static', filename='css/indexStyle.css') }}">
 {% endblock %}
@@ -7,7 +9,7 @@
 {% block body %}
 <ul>
     <li><a href="/de" title="Home Section">Home</a></li>
-    <li><a href="/calcDE" title="Inflationsüberblick">Inflationsüberblick</a></li>
+    <li><a href="/calcDE" title="Inflationsrechner">Inflationsrechner</a></li>
     <li><a href="/aboutDE" title="Über">Über</a></li>
     <li><a href="/" title="Englisch">Englisch</a></li>
 </ul>

@@ -6,6 +6,20 @@ import plotly.graph_objects as go
 from waitress import serve
 
 app = Flask(__name__)
+categoryNamesDE = {
+    "food_beverages": "Nahrungsmittel und alkoholfreie Getränke",
+    "alcohol_tobacco": "Alkoholische Getränke und Tabak",
+    "clothing_footwear": "Bekleidung und Schuhe",
+    "housing_utilities": "Wohnung, Wasser, Energie",
+    "furnishings_household": "Hausrat und laufende Instandhaltung",
+    "health": "Gesundheit",
+    "transport": "Verkehr",
+    "communication": "Nachrichtenübermittlung",
+    "recreation_culture": "Freizeit und Kultur",
+    "education": "Erziehung und Unterricht",
+    "restaurants_hotels": "Restaurants und Hotels",
+    "miscellaneous": "Verschiedene Waren und Dienstleistungen",
+}
 def get_db_connection():
     conn = sqlite3.connect('austrian_cpi.db')
     return conn
@@ -26,7 +40,7 @@ def index():
 
     fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
     config = {'staticPlot': True}
-    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(gridcolor='#444444',tickfont=dict(color='white')))
+    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(title='Year',gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(title='CPI (2015 = 100)',gridcolor='#444444',tickfont=dict(color='white')))
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}") #Last year inflaton
     currentCPI = cur.fetchone()
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {lastYear}")
@@ -72,7 +86,7 @@ def indexDE():
 
     fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
     config = {'staticPlot': True}
-    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(gridcolor='#444444',tickfont=dict(color='white')))
+    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(title='Jahr',gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(title='VPI (2015 = 100)',gridcolor='#444444',tickfont=dict(color='white')))
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}") #Last year inflaton
     currentCPI = cur.fetchone()
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {lastYear}")
@@ -85,7 +99,7 @@ def indexDE():
     column_names = [desc[0] for desc in cur.description]
     max_index = maxValue.index(neededValue) 
     max_column = column_names[max_index]
-    clean_name = max_column.title().replace('_', ' and ')
+    clean_name = categoryNamesDE[max_column]
 
     cur.execute(f"SELECT food_beverages from available_data WHERE year IN ({lastYear}, {currentYear}) ORDER BY year") #The big 3
     foodData = cur.fetchall()
