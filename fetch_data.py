@@ -2,6 +2,7 @@ import csv
 import io
 import os
 import sqlite3
+import threading
 import time
 import urllib.request
 
@@ -9,6 +10,7 @@ import urllib.request
 DATA_URL = "https://data.statistik.gv.at/data/OGD_vpi15_VPI_2015_1.csv"
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "austrian_cpi.db")
 MAX_AGE_DAYS = 30
+updateLock = threading.Lock() # Stops simultaneous requests from all downloading and writing at once
 
 # Statistik Austria COICOP codes -> columns in available_data
 columnNames = {
@@ -50,7 +52,22 @@ def build_rows(csvRows):
     return completeYears
 
 
-def write_database(yearly):
+def build_contributions(csvRows, years):
+    # Long format: one row per year and category with its basket weight (%) and
+    # Statistik Austria's official contribution to inflation (percentage points vs. the previous year)
+    contributionRows = []
+    for row in csvRows:
+        period = row["C-VPIZR-0"].removeprefix("VPIZR-")
+        column = columnNames.get(row["C-VPI5-0"])
+        if len(period) != 4 or int(period) not in years or column in (None, "cpi_overall"):
+            continue
+        weight = float(row["F-VPIGEWBM"].replace(",", "."))
+        contribution = float(row["F-VPIEFVJM"].replace(",", "."))
+        contributionRows.append((int(period), column, weight, contribution))
+    return contributionRows
+
+
+def write_database(yearly, contributionRows):
     # Build into a temporary file first so a failed run never leaves a half-written database
     tmpPath = DB_PATH.replace(".db", ".tmp.db")
     if os.path.exists(tmpPath):
@@ -61,25 +78,40 @@ def write_database(yearly):
     placeholders = ", ".join("?" for _ in range(len(columns) + 1))
     conn.executemany(f"INSERT INTO available_data VALUES ({placeholders})",
                      [[year] + [yearly[year][column] for column in columns] for year in sorted(yearly)])
+    conn.execute("CREATE TABLE contributions (year INTEGER, category TEXT, weight REAL, contribution REAL, PRIMARY KEY (year, category))")
+    conn.executemany("INSERT INTO contributions VALUES (?, ?, ?, ?)", contributionRows)
     conn.commit()
     conn.close()
     os.replace(tmpPath, DB_PATH)
 
 
-def update_database(force=False):
-    if not force and os.path.exists(DB_PATH):
-        ageDays = (time.time() - os.path.getmtime(DB_PATH)) / 86400
-        if ageDays < MAX_AGE_DAYS:
-            return
+def database_is_current():
+    # Fresh = younger than MAX_AGE_DAYS and has every table the app needs (older DBs lack contributions)
+    if not os.path.exists(DB_PATH):
+        return False
+    ageDays = (time.time() - os.path.getmtime(DB_PATH)) / 86400
+    conn = sqlite3.connect(DB_PATH)
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+    conn.close()
+    return ageDays < MAX_AGE_DAYS and {"available_data", "contributions"} <= tables
 
-    try:
-        yearly = build_rows(download_csv())
-        write_database(yearly)
-        print(f"CPI data updated: {min(yearly)}-{max(yearly)}")
-    except Exception as error:
-        if not os.path.exists(DB_PATH):
-            raise
-        print(f"Could not refresh CPI data ({error}), using the existing database")
+
+def update_database(force=False):
+    if not force and database_is_current():
+        return
+
+    with updateLock:
+        if not force and database_is_current(): # Another request may have finished the update while we waited
+            return
+        try:
+            csvRows = download_csv()
+            yearly = build_rows(csvRows)
+            write_database(yearly, build_contributions(csvRows, yearly))
+            print(f"CPI data updated: {min(yearly)}-{max(yearly)}")
+        except Exception as error:
+            if not os.path.exists(DB_PATH):
+                raise
+            print(f"Could not refresh CPI data ({error}), using the existing database")
 
 
 if __name__ == "__main__":

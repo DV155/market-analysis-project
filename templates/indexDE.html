@@ -17,7 +17,7 @@
 <div>{{ graph|safe }}</div>
 <div class='parent'>
   <div class='child'>Von <span class="lastYear">{{ lastYear }}</span> bis <span class="thisYear">{{currentYear}}</span> sind die Preise in Österreich um <span class='child'>{{ inflationValue }}</span>% gestiegen</div>
-  <div>Der größte Preistreiber war <span>{{ clean_name }}</span> mit <span>{{ neededValue }}</span> VPI-Punkten</div>
+  <div>Der größte Preistreiber war <span>{{ clean_name }}</span> mit einem Beitrag von <span>{{ neededValue }}</span> Prozentpunkten zur Inflation</div>
 </div>
 <div>Die durchschnittlichen Lebensmittelpreise stiegen um <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
 <div>Die durchschnittlichen Preise für Bildungsleistungen stiegen um <span class="toBeLookedThrough" id="edCounter" data-value="{{edDif}}">0</span>%</div>

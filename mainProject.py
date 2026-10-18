@@ -18,13 +18,9 @@ cur.execute("SELECT cpi_overall FROM available_data WHERE year = ?", (lastYear,)
 lastYearCPI = cur.fetchone()
 inflationCalc = round(((currentCPI[0] - lastYearCPI[0]) / lastYearCPI[0] ) * 100, 2)
 print("This means a", inflationCalc, "% inflation rate from", lastYear, "to", currentYear)
-cur.execute("SELECT * from available_data WHERE year = ?", (currentYear,))
-maxValue = cur.fetchone()
-neededValue = max(maxValue[2:])
-column_names = [desc[0] for desc in cur.description]
-max_index = maxValue.index(neededValue) 
-max_column = column_names[max_index]
-print("Biggest contributor in " + str(currentYear) + " is " + max_column + " at " +  str(neededValue))
+cur.execute("SELECT category, contribution FROM contributions WHERE year = ? ORDER BY contribution DESC LIMIT 1", (currentYear,))
+max_column, neededValue = cur.fetchone()
+print("Biggest contributor in " + str(currentYear) + " is " + max_column + " at " +  str(neededValue) + " percentage points")
 desFactor = input("What basket component do you want?")
 desYear = input("What year do you want?")
 validFactors = ["cpi_overall", "food_beverages", "alcohol_tobacco", "clothing_footwear", "housing_utilities", "furnishings_household",	"health", "transport", "communication", "recreation_culture", "education", "restaurants_hotels", "miscellaneous"]

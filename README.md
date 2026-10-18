@@ -32,7 +32,6 @@
     <li><a href="#data-source">Data Source</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -41,7 +40,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A web app that analyses the development of the Austrian Consumer Price Index (CPI, base year 2015) from 2015 to 2025. The data is downloaded automatically from Statistik Austria's open data portal, stored in SQLite and queried with SQL; the dashboard computes the latest annual inflation rate, finds the basket category with the highest index value and shows how prices for food, education and health changed year on year.
+A web app that analyses the development of the Austrian Consumer Price Index (CPI, base year 2015) from 2015 to 2025. The data is downloaded automatically from Statistik Austria's open data portal, stored in SQLite and queried with SQL; the dashboard computes the latest annual inflation rate, finds the basket category that contributed the most to inflation and shows how prices for food, education and health changed year on year.
 
 Built as a personal learning project combining Python, SQL and web development.
 
@@ -49,7 +48,8 @@ Features:
 * Automatic data download from Statistik Austria, refreshed every 30 days
 * Interactive Plotly chart of the overall CPI over time
 * Automatically calculated year-on-year inflation for the most recent year in the database
-* Highlights for the biggest basket contributor and key categories
+* Biggest inflation driver, using Statistik Austria's official contributions (basket weight × price change)
+* Highlights for key categories
 * Inflation calculator converting 2015 euros into today's value
 * Full English and German versions of every page
 * `mainProject.py`: a standalone command-line script for quick SQL queries and a Matplotlib plot
@@ -60,7 +60,7 @@ Features:
 * Flask
 * SQLite
 * Plotly
-* Matplotlib & pandas
+* Matplotlib
 * HTML, CSS, JavaScript (CountUp.js)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -73,7 +73,7 @@ Features:
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
-* Python 3
+* Python 3.11+
 
 ### Installation
 
@@ -150,7 +150,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- DATA SOURCE -->
 ## Data Source
 
-Consumer Price Index base 2015 (annual averages), [Statistik Austria - data.statistik.gv.at](https://data.statistik.gv.at/web/meta.jsp?dataset=OGD_vpi15_VPI_2015_1), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Consumer Price Index base 2015 (annual averages, basket weights and contributions to inflation), [Statistik Austria - data.statistik.gv.at](https://data.statistik.gv.at/web/meta.jsp?dataset=OGD_vpi15_VPI_2015_1), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

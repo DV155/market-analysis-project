@@ -7,7 +7,6 @@ from waitress import serve
 from fetch_data import update_database, DB_PATH
 
 app = Flask(__name__)
-update_database() # Downloads the CPI data if the DB is missing or older than 30 days
 categoryNamesDE = {
     "food_beverages": "Nahrungsmittel und alkoholfreie Getränke",
     "alcohol_tobacco": "Alkoholische Getränke und Tabak",
@@ -23,6 +22,7 @@ categoryNamesDE = {
     "miscellaneous": "Verschiedene Waren und Dienstleistungen",
 }
 def get_db_connection():
+    update_database() # Downloads the CPI data if the DB is missing or older than 30 days
     conn = sqlite3.connect(DB_PATH)
     return conn
 
@@ -49,12 +49,9 @@ def index():
     lastYearCPI = cur.fetchone()
     inflationCalc = round(((currentCPI[0] - lastYearCPI[0]) / lastYearCPI[0] ) * 100, 2)
 
-    cur.execute(f"SELECT * from available_data WHERE year = {currentYear}") #Max contributor
-    maxValue = cur.fetchone()
-    neededValue = max(maxValue[2:])
-    column_names = [desc[0] for desc in cur.description]
-    max_index = maxValue.index(neededValue) 
-    max_column = column_names[max_index]
+    cur.execute("SELECT category, contribution FROM contributions WHERE year = ? ORDER BY contribution DESC LIMIT 1", (currentYearCalc,)) #Max contributor in percentage points
+    max_column, neededValue = cur.fetchone()
+    neededValue = round(neededValue, 2)
     clean_name = max_column.title().replace('_', ' and ')
 
     cur.execute(f"SELECT food_beverages from available_data WHERE year IN ({lastYear}, {currentYear}) ORDER BY year") #The big 3
@@ -95,12 +92,9 @@ def indexDE():
     lastYearCPI = cur.fetchone()
     inflationCalc = round(((currentCPI[0] - lastYearCPI[0]) / lastYearCPI[0] ) * 100, 2)
 
-    cur.execute(f"SELECT * from available_data WHERE year = {currentYear}") #Max contributor
-    maxValue = cur.fetchone()
-    neededValue = max(maxValue[2:])
-    column_names = [desc[0] for desc in cur.description]
-    max_index = maxValue.index(neededValue) 
-    max_column = column_names[max_index]
+    cur.execute("SELECT category, contribution FROM contributions WHERE year = ? ORDER BY contribution DESC LIMIT 1", (currentYearCalc,)) #Max contributor in percentage points
+    max_column, neededValue = cur.fetchone()
+    neededValue = round(neededValue, 2)
     clean_name = categoryNamesDE[max_column]
 
     cur.execute(f"SELECT food_beverages from available_data WHERE year IN ({lastYear}, {currentYear}) ORDER BY year") #The big 3

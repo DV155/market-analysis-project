@@ -15,7 +15,7 @@
 <div>{{ graph|safe }}</div>
 <div class='parent'>
   <div class='child'>From <span class="lastYear">{{ lastYear }}</span> to <span class="thisYear">{{currentYear}}</span> prices in Austria rose by <span class='child'>{{ inflationValue }}%</span></div>
-  <div>The top inflation driver was <span>{{ clean_name }}</span> at <span>{{ neededValue }}</span> index points</div>
+  <div>The top inflation driver was <span>{{ clean_name }}</span>, contributing <span>{{ neededValue }}</span> percentage points to inflation</div>
 </div>
 <div>The average food prices increased by <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
 <div>The average educational service prices increased by <span class="toBeLookedThrough" id="edCounter"data-value="{{edDif}}">0</span>%</div>
