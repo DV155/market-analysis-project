@@ -29,6 +29,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#data-source">Data Source</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -40,11 +41,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A web app that analyses the development of the Austrian Consumer Price Index (CPI, base year 2015) from 2015 to 2025. Data is stored in SQLite and queried with SQL; the dashboard computes the latest annual inflation rate, finds the basket category with the highest index value and shows how prices for food, education and health changed year on year.
+A web app that analyses the development of the Austrian Consumer Price Index (CPI, base year 2015) from 2015 to 2025. The data is downloaded automatically from Statistik Austria's open data portal, stored in SQLite and queried with SQL; the dashboard computes the latest annual inflation rate, finds the basket category with the highest index value and shows how prices for food, education and health changed year on year.
 
 Built as a personal learning project combining Python, SQL and web development.
 
 Features:
+* Automatic data download from Statistik Austria, refreshed every 30 days
 * Interactive Plotly chart of the overall CPI over time
 * Automatically calculated year-on-year inflation for the most recent year in the database
 * Highlights for the biggest basket contributor and key categories
@@ -72,7 +74,6 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 * Python 3
-* An SQLite database `austrian_cpi.db` with the CPI data (see below)
 
 ### Installation
 
@@ -87,16 +88,13 @@ To get a local copy up and running follow these simple example steps.
    source env/bin/activate   # Windows: env\Scripts\activate
    pip install -r requirements.txt
    ```
-3. Provide the database. Database files are git-ignored, so create `austrian_cpi.db` in the project root with a table `available_data`. The columns are `year`, `cpi_overall` and one column per basket category:
-   ```
-   food_beverages, alcohol_tobacco, clothing_footwear, housing_utilities,
-   furnishings_household, health, transport, communication,
-   recreation_culture, education, restaurants_hotels, miscellaneous
-   ```
-   Annual CPI values (2015 = 100) are published by Statistik Austria.
-4. Run the app
+3. Run the app
    ```sh
    python app.py
+   ```
+   On first start the app downloads the CPI data and builds `austrian_cpi.db` (git-ignored). After that it only downloads again when the database is older than 30 days. To force a refresh:
+   ```sh
+   python fetch_data.py
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -146,6 +144,15 @@ Don't forget to give the project a star! Thanks again!
 <a href="https://github.com/DV155/market-analysis-project/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=DV155/market-analysis-project" alt="contrib.rocks image" />
 </a>
+
+
+
+<!-- DATA SOURCE -->
+## Data Source
+
+Consumer Price Index base 2015 (annual averages), [Statistik Austria - data.statistik.gv.at](https://data.statistik.gv.at/web/meta.jsp?dataset=OGD_vpi15_VPI_2015_1), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 

@@ -14,9 +14,9 @@
 </ul>
 <div class="title">Inflation Calculator</div>
 <form id="form" oninput="save()">
-<label for="inValue">€ amount in 2015</label>
-<input type="number" min="1" name="inValue" id="inValue">
+<label for="inValue">€ amount in {{ baseYear }}</label>
+<input type="number" min="1" name="inValue" id="inValue" data-factor="{{ priceFactor }}">
 </form>
-<div><span id="inputVar"></span> € in 2015 is <span id="outputVar"></span>€ today</div>
-<div>This is a loss of 27.9% of purchasing power in 10 years</div>
+<div><span id="inputVar"></span> € in {{ baseYear }} is <span id="outputVar"></span>€ in {{ latestYear }}</div>
+<div>This is a loss of {{ purchasingLoss }}% of purchasing power in {{ yearSpan }} years</div>
 {% endblock %}

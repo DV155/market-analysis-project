@@ -16,9 +16,9 @@
 </ul>
 <div class="title">Inflationsrechner</div>
 <form id="form" oninput="save()">
-<label for="inValue">€-Betrag im Jahr 2015</label>
-<input type="number" min="1" name="inValue" id="inValue">
+<label for="inValue">€-Betrag im Jahr {{ baseYear }}</label>
+<input type="number" min="1" name="inValue" id="inValue" data-factor="{{ priceFactor }}">
 </form>
-<div><span id="inputVar"></span> € im Jahr 2015 entsprechen heute <span id="outputVar"></span> €</div>
-<div>Das entspricht einem Kaufkraftverlust von 27,9% in 10 Jahren</div>
+<div><span id="inputVar"></span> € im Jahr {{ baseYear }} entsprechen <span id="outputVar"></span> € im Jahr {{ latestYear }}</div>
+<div>Das entspricht einem Kaufkraftverlust von {{ purchasingLoss|string|replace('.', ',') }}% in {{ yearSpan }} Jahren</div>
 {% endblock %}

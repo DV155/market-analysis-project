@@ -4,8 +4,10 @@ import math
 #import plotly.express as px
 import plotly.graph_objects as go
 from waitress import serve
+from fetch_data import update_database, DB_PATH
 
 app = Flask(__name__)
+update_database() # Downloads the CPI data if the DB is missing or older than 30 days
 categoryNamesDE = {
     "food_beverages": "Nahrungsmittel und alkoholfreie Getränke",
     "alcohol_tobacco": "Alkoholische Getränke und Tabak",
@@ -21,7 +23,7 @@ categoryNamesDE = {
     "miscellaneous": "Verschiedene Waren und Dienstleistungen",
 }
 def get_db_connection():
-    conn = sqlite3.connect('austrian_cpi.db')
+    conn = sqlite3.connect(DB_PATH)
     return conn
 
 @app.route('/')
@@ -125,23 +127,28 @@ def about():
 def aboutDE():
     return render_template('aboutDE.html')
 
-@app.route('/calc')
-def calc():
+def get_calc_values():
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT year, cpi_overall FROM available_data")
-
+    cpiData = dict(cur.fetchall())
     conn.close()
-    return render_template('calculator.html')
+
+    latestYear = max(cpiData)
+    baseYear = latestYear - 10
+    if baseYear not in cpiData: # Fall back to 2015 if there's no data from ten years ago
+        baseYear = 2015
+    priceFactor = cpiData[latestYear] / cpiData[baseYear]
+    purchasingLoss = round((1 - cpiData[baseYear] / cpiData[latestYear]) * 100, 1)
+    return dict(baseYear=baseYear, latestYear=latestYear, yearSpan=latestYear - baseYear, priceFactor=priceFactor, purchasingLoss=purchasingLoss)
+
+@app.route('/calc')
+def calc():
+    return render_template('calculator.html', **get_calc_values())
 
 @app.route('/calcDE')
 def calcDE():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT year, cpi_overall FROM available_data")
-
-    conn.close()
-    return render_template('calculatorDE.html')
+    return render_template('calculatorDE.html', **get_calc_values())
 
 if __name__ == "__main__":
     #serve(app)
