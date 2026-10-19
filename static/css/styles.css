@@ -1,4 +1,4 @@
-/* Colour tokens: light by default, dark when the system asks for it */
+/* Colour tokens: light by default; dark follows the system unless the visitor picks a theme with the toggle */
 :root {
   color-scheme: light dark;
   --bg: #f7f4ed; /* soft ivory */
@@ -23,8 +23,9 @@
   --title-edge: drop-shadow(0 0 0.5px rgba(60, 0, 10, 0.7)) drop-shadow(0 0 0.5px rgba(60, 0, 10, 0.7)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
 }
 
+/* Dark colours: used when the system is dark (unless the visitor picked light), or when the visitor picked dark */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #000000;
     --surface: #1c1c1e;
     --text: #f5f5f7;
@@ -40,6 +41,28 @@
     --title-stripes: linear-gradient(to bottom, #e4202f 0 57%, #f5f5f7 57% 73%, #e4202f 73% 100%);
     --title-edge: none;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #000000;
+  --surface: #1c1c1e;
+  --text: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --separator: rgba(255, 255, 255, 0.12);
+  --fill: rgba(255, 255, 255, 0.08);
+  --fill-pressed: rgba(255, 255, 255, 0.16);
+  --accent: #30d158;
+  --focus: #0a84ff;
+  --nav-material: rgba(22, 22, 23, 0.72);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+  /* Dark mode stripes: flat red-white-red, the black page already gives the white band contrast */
+  --title-stripes: linear-gradient(to bottom, #e4202f 0 57%, #f5f5f7 57% 73%, #e4202f 73% 100%);
+  --title-edge: none;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 /* System font, comfortable body leading, spacing in rem so it scales with the user's text size */
@@ -86,8 +109,8 @@ html.scrolled body > ul {
   box-shadow: 0 1px 0 var(--separator), 0 8px 24px -12px rgba(0, 0, 0, 0.25);
 }
 
-/* Language switch is set apart from the page links */
-body > ul li:last-child {
+/* Language switch and theme toggle are set apart from the page links */
+body > ul li:nth-child(4) {
   margin-left: 0.5rem;
   padding-left: 0.75rem;
   border-left: 1px solid var(--separator);
@@ -125,7 +148,63 @@ body > ul li a[aria-current="page"] {
   font-weight: 600;
 }
 
+/* Theme toggle: a round icon button, same feedback as the nav links */
+body > ul li:has(.theme-toggle) {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease, color 150ms ease, transform 100ms ease-out;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+  background: var(--fill);
+}
+
+.theme-toggle:active {
+  transform: scale(0.94);
+  background: var(--fill-pressed);
+}
+
+.theme-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Moon in light mode (switch to dark), sun in dark mode (switch to light) */
+.theme-toggle .icon-sun { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* Short cross-fade while switching so the brightness doesn't jump */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease !important;
+}
+
 a:focus-visible,
+button:focus-visible,
 input:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
@@ -181,9 +260,13 @@ p {
     padding: 0.5rem 0.625rem;
     font-size: 0.875rem;
   }
-  body > ul li:last-child {
+  body > ul li:nth-child(4) {
     margin-left: 0.25rem;
     padding-left: 0.25rem;
+  }
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
   }
 }
 
@@ -195,7 +278,8 @@ p {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
   }
-  body > ul li a:active {
+  body > ul li a:active,
+  .theme-toggle:active {
     transform: none;
   }
 }

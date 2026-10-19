@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Apply a saved theme before the page is drawn, so it never flashes the wrong colours
+        try {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "light" || savedTheme === "dark") document.documentElement.dataset.theme = savedTheme;
+        } catch (e) {}
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     {% block head%} {% endblock %}
 </head>
 <body>
    {% block body%} {% endblock %} 
 <script>
+{ // Own block scope, so these names can't clash with page scripts like index.js
     // Highlight the nav link for the current page, and only show the nav's edge once content scrolls under it
     for (const link of document.querySelectorAll("body > ul a")) {
         if (link.getAttribute("href") === location.pathname) link.setAttribute("aria-current", "page");
@@ -16,6 +24,29 @@
     const markScrolled = () => document.documentElement.classList.toggle("scrolled", window.scrollY > 0);
     window.addEventListener("scroll", markScrolled, { passive: true });
     markScrolled();
+
+    // Light/dark toggle: starts from the system setting, remembers the visitor's choice
+    const root = document.documentElement;
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const currentTheme = () => root.dataset.theme || (systemDark.matches ? "dark" : "light");
+    const toggle = document.querySelector(".theme-toggle");
+    const updateToggle = () => toggle && toggle.setAttribute("aria-pressed", currentTheme() === "dark");
+    if (toggle) {
+        toggle.addEventListener("click", () => {
+            const newTheme = currentTheme() === "dark" ? "light" : "dark";
+            if (!reduceMotion.matches) {
+                root.classList.add("theme-switching");
+                setTimeout(() => root.classList.remove("theme-switching"), 300);
+            }
+            root.dataset.theme = newTheme;
+            try { localStorage.setItem("theme", newTheme); } catch (e) {}
+            updateToggle();
+        });
+        systemDark.addEventListener("change", updateToggle);
+        updateToggle();
+    }
+}
 </script>
 </body>
 </html>
