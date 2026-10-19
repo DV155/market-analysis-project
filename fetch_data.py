@@ -6,13 +6,11 @@ import threading
 import time
 import urllib.request
 
-# Consumer Price Index base 2015 from Statistik Austria's open data portal (CC BY 4.0)
 DATA_URL = "https://data.statistik.gv.at/data/OGD_vpi15_VPI_2015_1.csv"
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "austrian_cpi.db")
 MAX_AGE_DAYS = 30
 updateLock = threading.Lock() # Stops simultaneous requests from all downloading and writing at once
 
-# Statistik Austria COICOP codes -> columns in available_data
 columnNames = {
     "VPI-0": "cpi_overall",
     "VPI-01": "food_beverages",
@@ -40,7 +38,7 @@ def download_csv():
 def build_rows(csvRows):
     yearly = {2015: {column: 100.0 for column in columns}} # Base year, every index is 100 by definition
     for row in csvRows:
-        period = row["C-VPIZR-0"].removeprefix("VPIZR-") # "2025" = annual average, "202512" = single month
+        period = row["C-VPIZR-0"].removeprefix("VPIZR-") 
         column = columnNames.get(row["C-VPI5-0"])
         if len(period) != 4 or column is None:
             continue
@@ -53,8 +51,6 @@ def build_rows(csvRows):
 
 
 def build_contributions(csvRows, years):
-    # Long format: one row per year and category with its basket weight (%) and
-    # Statistik Austria's official contribution to inflation (percentage points vs. the previous year)
     contributionRows = []
     for row in csvRows:
         period = row["C-VPIZR-0"].removeprefix("VPIZR-")
@@ -67,8 +63,7 @@ def build_contributions(csvRows, years):
     return contributionRows
 
 
-def write_database(yearly, contributionRows):
-    # Build into a temporary file first so a failed run never leaves a half-written database
+def write_database(yearly, contributionRows): # building a temporary file to avoid half-built db on fail
     tmpPath = DB_PATH.replace(".db", ".tmp.db")
     if os.path.exists(tmpPath):
         os.remove(tmpPath)
@@ -86,7 +81,6 @@ def write_database(yearly, contributionRows):
 
 
 def database_is_current():
-    # Fresh = younger than MAX_AGE_DAYS and has every table the app needs (older DBs lack contributions)
     if not os.path.exists(DB_PATH):
         return False
     ageDays = (time.time() - os.path.getmtime(DB_PATH)) / 86400
@@ -101,7 +95,7 @@ def update_database(force=False):
         return
 
     with updateLock:
-        if not force and database_is_current(): # Another request may have finished the update while we waited
+        if not force and database_is_current(): 
             return
         try:
             csvRows = download_csv()

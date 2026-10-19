@@ -43,7 +43,7 @@ def index():
     fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#34c759', width=3), marker=dict(color='#34c759', size=7)))
     config = {'staticPlot': True}
     fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(family='-apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, sans-serif', color='#8e8e93'), margin=dict(l=56, r=24, t=16, b=48), xaxis=dict(title='Year',showgrid=False,linecolor='rgba(142,142,147,0.4)',tickfont=dict(color='#8e8e93')),yaxis=dict(title='CPI (2015 = 100)',gridcolor='rgba(142,142,147,0.2)',zeroline=False,tickfont=dict(color='#8e8e93')))
-    cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}") #Last year inflaton
+    cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}") 
     currentCPI = cur.fetchone()
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {lastYear}")
     lastYearCPI = cur.fetchone()
@@ -54,7 +54,7 @@ def index():
     neededValue = round(neededValue, 2)
     clean_name = max_column.title().replace('_', ' and ')
 
-    cur.execute(f"SELECT food_beverages from available_data WHERE year IN ({lastYear}, {currentYear}) ORDER BY year") #The big 3
+    cur.execute(f"SELECT food_beverages from available_data WHERE year IN ({lastYear}, {currentYear}) ORDER BY year") 
     foodData = cur.fetchall()
     foodDif = round(((foodData[1][0] - foodData[0][0]) / foodData[0][0] ) * 100, 2)
     cur.execute(f"SELECT education from available_data WHERE year IN ({lastYear}, {currentYear}) ORDER BY year")
