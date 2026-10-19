@@ -7,6 +7,7 @@
 <div align="center">
   <h3 align="center">Austrian Inflation Tracker</h3>
   <p align="center">A Flask web app visualising consumer price inflation in Austria</p>
+  <p align="center"><a href="https://market-analysis-project.onrender.com/"><strong>View the live site »</strong></a></p>
 </div>
 
 
@@ -29,6 +30,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#deployment">Deployment</a></li>
     <li><a href="#data-source">Data Source</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -40,9 +42,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A web app that analyses the development of the Austrian Consumer Price Index (CPI, base year 2015) from 2015 to 2025. The data is downloaded automatically from Statistik Austria's open data portal, stored in SQLite and queried with SQL; the dashboard computes the latest annual inflation rate, finds the basket category that contributed the most to inflation and shows how prices for food, education and health changed year on year.
+A web app that analyses the development of the Austrian Consumer Price Index (CPI, base year 2015) from 2015 to the latest available year. The data is downloaded automatically from Statistik Austria's open data portal, stored in SQLite and queried with SQL; the dashboard computes the latest annual inflation rate, finds the basket category that contributed the most to inflation and shows how prices for food, education and health changed year on year.
 
 Built as a personal learning project combining Python, SQL and web development.
+
+**Live site:** [market-analysis-project.onrender.com](https://market-analysis-project.onrender.com/). It's on Render's free tier, so the first visit after a quiet period can take up to a minute while the server wakes up.
 
 Features:
 * Automatic data download from Statistik Austria, refreshed every 30 days
@@ -50,7 +54,7 @@ Features:
 * Automatically calculated year-on-year inflation for the most recent year in the database
 * Biggest inflation driver, using Statistik Austria's official contributions (basket weight × price change)
 * Highlights for key categories
-* Inflation calculator converting 2015 euros into today's value
+* Inflation calculator converting euros from ten years ago into the latest year's value
 * Full English and German versions of every page
 * `mainProject.py`: a standalone command-line script for quick SQL queries and a Matplotlib plot
 
@@ -70,7 +74,7 @@ Features:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple example steps.
+To just try the app, open the [live site](https://market-analysis-project.onrender.com/), no installation needed. To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 * Python 3.11+
@@ -104,20 +108,34 @@ To get a local copy up and running follow these simple example steps.
 <!-- USAGE -->
 ## Usage
 
-Open `http://127.0.0.1:5000` in your browser.
+Open the [live site](https://market-analysis-project.onrender.com/), or `http://127.0.0.1:5000` when running locally.
 
 | Route | Page |
 | --- | --- |
-| `/` · `/de` | Dashboard (English / German) |
-| `/calc` · `/calcDE` | Inflation calculator |
-| `/about` · `/aboutDE` | About the project |
-
-For a production-style server, the app is set up to run with Waitress: replace `app.run(debug=True)` with `serve(app)` in `app.py`.
+| [`/`](https://market-analysis-project.onrender.com/) · [`/de`](https://market-analysis-project.onrender.com/de) | Dashboard (English / German) |
+| [`/calc`](https://market-analysis-project.onrender.com/calc) · [`/calcDE`](https://market-analysis-project.onrender.com/calcDE) | Inflation calculator |
+| [`/about`](https://market-analysis-project.onrender.com/about) · [`/aboutDE`](https://market-analysis-project.onrender.com/aboutDE) | About the project |
 
 To run the command-line analysis instead:
 ```sh
 python mainProject.py
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- DEPLOYMENT -->
+## Deployment
+
+The live site runs on [Render](https://render.com) as a free web service, connected to this repository. Every push to `main` triggers a new deploy automatically.
+
+| Setting | Value |
+| --- | --- |
+| Build command | `pip install -r requirements.txt` |
+| Start command | `waitress-serve --listen=0.0.0.0:$PORT app:app` |
+
+No database is stored on the server: Render's disk is wiped on every deploy and restart, so the app downloads the CPI data and rebuilds `austrian_cpi.db` on the first request after starting.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
