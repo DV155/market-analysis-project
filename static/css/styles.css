@@ -1,52 +1,223 @@
+/* Colour tokens: light by default, dark when the system asks for it */
+:root {
+  color-scheme: light dark;
+  --bg: #f7f4ed; /* soft ivory */
+  --surface: #ffffff;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --separator: rgba(0, 0, 0, 0.1);
+  --fill: rgba(0, 0, 0, 0.05);
+  --fill-pressed: rgba(0, 0, 0, 0.1);
+  --accent: #248a3d;
+  --focus: #0071e3;
+  --nav-material: rgba(247, 244, 237, 0.72);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
+  /* Light mode stripes: each band is shaded top to bottom, the white band fades into a warm silver */
+  --title-stripes: linear-gradient(
+    to bottom,
+    #ea1f40 0, #a00b23 57%,
+    #ffffff 57%, #d3cec2 73%,
+    #d4142f 73%, #8c091e 100%
+  );
+  /* Thin dark outline and a soft shadow so the white band stays visible on the light page */
+  --title-edge: drop-shadow(0 0 0.5px rgba(60, 0, 10, 0.7)) drop-shadow(0 0 0.5px rgba(60, 0, 10, 0.7)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --text: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --separator: rgba(255, 255, 255, 0.12);
+    --fill: rgba(255, 255, 255, 0.08);
+    --fill-pressed: rgba(255, 255, 255, 0.16);
+    --accent: #30d158;
+    --focus: #0a84ff;
+    --nav-material: rgba(22, 22, 23, 0.72);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+    /* Dark mode stripes: flat red-white-red, the black page already gives the white band contrast */
+    --title-stripes: linear-gradient(to bottom, #e4202f 0 57%, #f5f5f7 57% 73%, #e4202f 73% 100%);
+    --title-edge: none;
+  }
+}
+
+/* System font, comfortable body leading, spacing in rem so it scales with the user's text size */
 body {
-  background-color: #2d2d2d;
-  color:white;
-}
-
-ul {
-  list-style-type: none;
   margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  padding:10px 0px;
+  background-color: var(--bg);
+  color: var(--text);
+  font: 100%/1.5 -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 4rem;
 }
 
-ul li {
-  float: left;
+/* Everything except the nav sits in one centred column */
+body > :not(ul):not(script) {
+  width: min(56rem, 100% - 2rem);
+  margin-inline: auto;
+  box-sizing: border-box;
 }
 
 a {
-  color:white;
+  color: var(--text);
 }
 
-ul li a {
+/* Navigation: a translucent bar that content scrolls underneath */
+body > ul {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  list-style-type: none;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem;
+  background: var(--nav-material);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  transition: box-shadow 200ms ease;
+}
+
+/* Soft edge only once content is actually underneath the bar, no permanent divider */
+html.scrolled body > ul {
+  box-shadow: 0 1px 0 var(--separator), 0 8px 24px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Language switch is set apart from the page links */
+body > ul li:last-child {
+  margin-left: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--separator);
+}
+
+body > ul li a {
   display: block;
-  /*color: white;*/
-  text-align: center;
-  padding: 14px 16px;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   text-decoration: none;
+  color: var(--text-secondary);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease, color 150ms ease, transform 100ms ease-out;
 }
 
+body > ul li a:hover {
+  color: var(--text);
+  background: var(--fill);
+}
+
+/* Feedback on press, not on release */
+body > ul li a:active {
+  transform: scale(0.97);
+  background: var(--fill-pressed);
+}
+
+/* Where am I? */
+body > ul li a[aria-current="page"] {
+  color: var(--text);
+  background: var(--fill);
+  font-weight: 600;
+}
+
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Page title: large type wants tight leading and negative tracking */
 .title {
-    background: linear-gradient(
-        to bottom,
-        red 0% 33%,
-        white 33% 66%,
-        red 66% 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    -webkit-text-stroke: 0.5px black;
-    font-size: 75px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top:50px;
+  margin-top: clamp(2.5rem, 8vw, 4.5rem);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.015em; /* a little looser than usual so the outlined letters don't run together */
+  font-optical-sizing: auto;
+  /* Red-white-red letters. The stripes are sized to one line (1.05em) and repeat,
+     so a title that wraps on small screens gets full stripes on every line.
+     The stops split the lowercase letters (most of every title) into three equal bands. */
+  background: var(--title-stripes) 0 0 / 100% 1.05em repeat-y;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Light mode: a thin dark outline encloses the white band so it stays visible on the light page */
+  filter: var(--title-edge);
+}
+
+/* Section headings and body copy (About pages) */
+h2 {
+  max-width: 40rem;
+  margin: 2.5rem auto 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0 auto 1rem;
+  max-width: 40rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* Small screens: keep the nav on one line */
+@media (max-width: 30rem) {
+  body > ul {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding-inline: 0.5rem;
+  }
+  body > ul li a {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.875rem;
+  }
+  body > ul li:last-child {
+    margin-left: 0.25rem;
+    padding-left: 0.25rem;
+  }
 }
 
 .modebar {
-display: none !important;
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+  body > ul li a:active {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body > ul {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --text-secondary: var(--text);
+    --separator: currentColor;
+    --title-edge: drop-shadow(0 0 1px var(--text));
+  }
+  body > ul {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid var(--text);
+  }
 }

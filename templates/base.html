@@ -8,5 +8,14 @@
 </head>
 <body>
    {% block body%} {% endblock %} 
+<script>
+    // Highlight the nav link for the current page, and only show the nav's edge once content scrolls under it
+    for (const link of document.querySelectorAll("body > ul a")) {
+        if (link.getAttribute("href") === location.pathname) link.setAttribute("aria-current", "page");
+    }
+    const markScrolled = () => document.documentElement.classList.toggle("scrolled", window.scrollY > 0);
+    window.addEventListener("scroll", markScrolled, { passive: true });
+    markScrolled();
+</script>
 </body>
 </html>

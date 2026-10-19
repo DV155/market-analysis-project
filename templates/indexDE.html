@@ -14,14 +14,16 @@
     <li><a href="/" title="Englisch">Englisch</a></li>
 </ul>
 <div class="title">Inflation in Österreich</div>
-<div>{{ graph|safe }}</div>
+<div class="chart">{{ graph|safe }}</div>
 <div class='parent'>
   <div class='child'>Von <span class="lastYear">{{ lastYear }}</span> bis <span class="thisYear">{{currentYear}}</span> sind die Preise in Österreich um <span class='child'>{{ inflationValue }}</span>% gestiegen</div>
   <div>Der größte Preistreiber war <span>{{ clean_name }}</span> mit einem Beitrag von <span>{{ neededValue }}</span> Prozentpunkten zur Inflation</div>
 </div>
-<div>Die durchschnittlichen Lebensmittelpreise stiegen um <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
-<div>Die durchschnittlichen Preise für Bildungsleistungen stiegen um <span class="toBeLookedThrough" id="edCounter" data-value="{{edDif}}">0</span>%</div>
-<div>Die durchschnittlichen Preise für Gesundheitsleistungen stiegen um <span class="toBeLookedThrough" id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
+<div class="stats">
+  <div>Die durchschnittlichen Lebensmittelpreise stiegen um <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
+  <div>Die durchschnittlichen Preise für Bildungsleistungen stiegen um <span class="toBeLookedThrough" id="edCounter" data-value="{{edDif}}">0</span>%</div>
+  <div>Die durchschnittlichen Preise für Gesundheitsleistungen stiegen um <span class="toBeLookedThrough" id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
 
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>

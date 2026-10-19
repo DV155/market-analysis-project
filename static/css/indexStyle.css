@@ -1,9 +1,70 @@
+/* Chart and figures sit on cards: one surface per group of related information */
+.chart,
+.parent,
+.stats > div {
+  background: var(--surface);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.chart {
+  padding: 1rem 0.5rem 0.5rem;
+  overflow: hidden;
+}
+
+/* Headline figures */
 .parent {
-  margin: 1rem;
-  padding: 2rem 2rem;
+  margin-top: 1.5rem;
+  padding: 2rem;
   text-align: center;
 }
-.child {
-  padding: 1rem 1rem;
-  vertical-align: middle;
+
+.parent > div {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.parent > div + div {
+  margin-top: 0.75rem;
+}
+
+/* The inflation sentence is the most important thing on the page, so it gets the most weight */
+.parent > .child {
+  font-size: clamp(1.25rem, 3vw, 1.625rem);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.parent span {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.parent .child .child {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Category tiles */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stats > div {
+  padding: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.toBeLookedThrough {
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }

@@ -40,9 +40,9 @@ def index():
     currentYear = str(currentYearCalc)
     lastYear = str(currentYearCalc - 1)
 
-    fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
+    fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#34c759', width=3), marker=dict(color='#34c759', size=7)))
     config = {'staticPlot': True}
-    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(title='Year',gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(title='CPI (2015 = 100)',gridcolor='#444444',tickfont=dict(color='white')))
+    fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(family='-apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, sans-serif', color='#8e8e93'), margin=dict(l=56, r=24, t=16, b=48), xaxis=dict(title='Year',showgrid=False,linecolor='rgba(142,142,147,0.4)',tickfont=dict(color='#8e8e93')),yaxis=dict(title='CPI (2015 = 100)',gridcolor='rgba(142,142,147,0.2)',zeroline=False,tickfont=dict(color='#8e8e93')))
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}") #Last year inflaton
     currentCPI = cur.fetchone()
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {lastYear}")
@@ -83,9 +83,9 @@ def indexDE():
     currentYear = str(currentYearCalc)
     lastYear = str(currentYearCalc - 1)
 
-    fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#4ade80'), marker=dict(color='#4ade80')))
+    fig = go.Figure(data=go.Scatter(x=years, y=cpi, mode='lines+markers', line=dict(color='#34c759', width=3), marker=dict(color='#34c759', size=7)))
     config = {'staticPlot': True}
-    fig.update_layout(plot_bgcolor='#2d2d2d', paper_bgcolor='#1e1e1e', font=dict(color='#e0e0e0'),xaxis=dict(title='Jahr',gridcolor='#444444',tickfont=dict(color='white')),yaxis=dict(title='VPI (2015 = 100)',gridcolor='#444444',tickfont=dict(color='white')))
+    fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(family='-apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, sans-serif', color='#8e8e93'), margin=dict(l=56, r=24, t=16, b=48), xaxis=dict(title='Jahr',showgrid=False,linecolor='rgba(142,142,147,0.4)',tickfont=dict(color='#8e8e93')),yaxis=dict(title='VPI (2015 = 100)',gridcolor='rgba(142,142,147,0.2)',zeroline=False,tickfont=dict(color='#8e8e93')))
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {currentYear}") #Last year inflaton
     currentCPI = cur.fetchone()
     cur.execute(f"SELECT cpi_overall FROM available_data WHERE year = {lastYear}")

@@ -12,14 +12,16 @@
     <li><a href="/de" title="German">German</a></li>
 </ul>
 <div class="title">Inflation in Austria</div>
-<div>{{ graph|safe }}</div>
+<div class="chart">{{ graph|safe }}</div>
 <div class='parent'>
   <div class='child'>From <span class="lastYear">{{ lastYear }}</span> to <span class="thisYear">{{currentYear}}</span> prices in Austria rose by <span class='child'>{{ inflationValue }}%</span></div>
   <div>The top inflation driver was <span>{{ clean_name }}</span>, contributing <span>{{ neededValue }}</span> percentage points to inflation</div>
 </div>
-<div>The average food prices increased by <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
-<div>The average educational service prices increased by <span class="toBeLookedThrough" id="edCounter"data-value="{{edDif}}">0</span>%</div>
-<div>The average healthcare service prices increased by <span class="toBeLookedThrough" id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
+<div class="stats">
+  <div>The average food prices increased by <span class="toBeLookedThrough" id="foodCounter" data-value="{{foodDif}}">0</span>%</div>
+  <div>The average educational service prices increased by <span class="toBeLookedThrough" id="edCounter"data-value="{{edDif}}">0</span>%</div>
+  <div>The average healthcare service prices increased by <span class="toBeLookedThrough" id="hpCounter" data-value="{{healthDif}}">0</span>%</div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
 
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>
